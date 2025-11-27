@@ -1,0 +1,51 @@
+import string
+
+# Create dictionaries for letters and digits
+all_chars = string.ascii_letters + string.digits
+Letters = {char: i+1 for i, char in enumerate(all_chars)}
+NumbersToLetters = {v: k for k, v in Letters.items()}
+
+# Encryption function
+def encrypt(text, offset):
+    result = ""
+    for char in text:
+        if char in Letters:
+            Encrypted = (
+                ((Letters[char]-1 + offset)%26)+1 if char.islower() else
+                ((Letters[char]-27 + offset)%26)+27 if char.isupper() else
+                ((Letters[char]-53 + offset)%10)+53
+            )
+            result += NumbersToLetters[Encrypted]
+        else:
+            result += char
+    return result
+
+# Decryption function
+def decrypt(text, offset):
+    result = ""
+    for char in text:
+        if char in Letters:
+            Decrypted = (
+                ((Letters[char]-1 - offset)%26)+1 if char.islower() else
+                ((Letters[char]-27 - offset)%26)+27 if char.isupper() else
+                ((Letters[char]-53 - offset)%10)+53
+            )
+            result += NumbersToLetters[Decrypted]
+        else:
+            result += char
+    return result
+
+
+Question = input("Do you wish to encrypt or decrypt? E/D?: ").upper()
+
+
+if Question not in ['E', 'D']:
+    print("No action taken. Please choose E or D.")
+else:
+    Message = input("Enter your message: ")
+    Offset = int(input("Enter your desired offset: "))
+
+    if Question == 'E':
+        print( encrypt(Message, Offset))
+    else:
+        print( decrypt(Message, Offset))
